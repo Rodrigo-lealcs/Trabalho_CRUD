@@ -20,12 +20,13 @@ while True:
     try:
         opcao = int(input("Escolha uma opção: "))
         if opcao == 1:
-            id_do_ativo = int(input("Digite o ID do ativo: "))
+            id_do_ativo = input("Digite o ID do ativo: ")
             nome_do_ativo = input("Digite o nome do ativo: ")
             tipo_do_ativo = input("Digite o tipo do ativo: ")
             responsavel_pelo_ativo = input("Digite o responsável pelo ativo: " )
             setor_do_ativo = input("Digite o setor do ativo: ")
             ficha_do_ativo = {
+                "id": id_do_ativo,
                 "nome": nome_do_ativo,
                 "tipo": tipo_do_ativo,
                 "responsavel": responsavel_pelo_ativo,
@@ -37,15 +38,28 @@ while True:
             print(f"---Ativo com Id {id_do_ativo} cadastrado com sucesso!---")
            
         elif opcao == 2:
-            id_busca = int(input("Digite o ID que deseja consultar: "))
-            if id_busca in base_de_dados:
-                ativo_encontrado = base_de_dados[id_busca]
-                print(f"Nome: {ativo_encontrado['nome']}")
-                print(f"Setor: {ativo_encontrado['setor']}")
+            tipo_de_busca = int(input("Deseja buscar por:\n1 - ID\n2 - Nome\nEscolha: "))
+            if tipo_de_busca == 1:
+                id_busca = input("Qual o ID que deseja buscar? ")
+                if id_busca in base_de_dados:
+                    ativo = base_de_dados[id_busca]
+                    print(f"Ativo encontrado:\nID: {id_busca}\nNome do ativo: {ativo['nome']} \nTipo do ativo: {ativo['tipo']}\nResponsável pelo ativo: {ativo['responsavel']}\nSetor do ativo: {ativo['setor']}")
+                else:
+                    print("A busca falhou. Ativo não encontrado.")   
+            elif tipo_de_busca == 2:
+                    nome_busca = input("Qual o nome do Ativo que deseja buscar? ")
+                    encontrado = False
+                    for ativo in base_de_dados.values():
+                        if ativo['nome'] == nome_busca:
+                            print(f"Nome do ativo: {ativo['nome']}\nID do ativo: {ativo['id']}\nTipo do ativo: {ativo['tipo']}\nResponsável pelo ativo: {ativo['responsavel']}\nSetor do ativo: {ativo['setor']}")
+                            encontrado = True
+                            break
+                    if encontrado == False:
+                        print("Ativo não encontrado na base de dados.")
             else:
                 print("Ativo não encontrado na base de dados.")
         elif opcao == 3:
-            id_busca = int(input("Digite o ID do ativo que deseja atualizar: "))
+            id_busca = input("Digite o ID do ativo que deseja atualizar: ")
             if id_busca in base_de_dados:
                 ativo_encontrado = base_de_dados[id_busca]
                 try:
@@ -72,7 +86,7 @@ while True:
                 print("Ativo não encontrado na base de dados.")
         elif opcao == 4:
             try:
-                id_busca = int(input("Digite o Id do ativo que deseja remover: "))
+                id_busca = input("Digite o Id do ativo que deseja remover: ")
                 if id_busca in base_de_dados:
                     confimacao = input(f"Tem certeza de que deseja excluir esse o ID {id_busca}? (S/N): ").lower()
                     if confimacao == "s":
