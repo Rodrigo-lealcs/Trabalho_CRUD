@@ -16,7 +16,8 @@ while True:
     print("2 - Consultar Ativo")
     print("3 - Atualizar Ativo")
     print("4 - Remover Ativo")
-    print("5 - Sair")
+    print("5 - Cadastrar vulnerabilidade")
+    print("6 - Sair")
     try:
         opcao = int(input("Escolha uma opção: "))
         if opcao == 1:
@@ -30,7 +31,8 @@ while True:
                 "nome": nome_do_ativo,
                 "tipo": tipo_do_ativo,
                 "responsavel": responsavel_pelo_ativo,
-                "setor": setor_do_ativo
+                "setor": setor_do_ativo,
+                "vulnerabilidade": []
             }
             base_de_dados[id_do_ativo] = ficha_do_ativo
             with open("inventario.json", "w") as ficheiro:
@@ -38,26 +40,36 @@ while True:
             print(f"---Ativo com Id {id_do_ativo} cadastrado com sucesso!---")
            
         elif opcao == 2:
+            ativo_encontrado = None
             tipo_de_busca = int(input("Deseja buscar por:\n1 - ID\n2 - Nome\nEscolha: "))
             if tipo_de_busca == 1:
                 id_busca = input("Qual o ID que deseja buscar? ")
                 if id_busca in base_de_dados:
-                    ativo = base_de_dados[id_busca]
-                    print(f"Ativo encontrado:\nID: {id_busca}\nNome do ativo: {ativo['nome']} \nTipo do ativo: {ativo['tipo']}\nResponsável pelo ativo: {ativo['responsavel']}\nSetor do ativo: {ativo['setor']}")
+                    ativo_encontrado = base_de_dados[id_busca]
                 else:
                     print("A busca falhou. Ativo não encontrado.")   
             elif tipo_de_busca == 2:
                     nome_busca = input("Qual o nome do Ativo que deseja buscar? ")
-                    encontrado = False
                     for ativo in base_de_dados.values():
                         if ativo['nome'] == nome_busca:
-                            print(f"Nome do ativo: {ativo['nome']}\nID do ativo: {ativo['id']}\nTipo do ativo: {ativo['tipo']}\nResponsável pelo ativo: {ativo['responsavel']}\nSetor do ativo: {ativo['setor']}")
-                            encontrado = True
+                            ativo_encontrado = ativo
                             break
-                    if encontrado == False:
+                    if ativo_encontrado is None:
                         print("Ativo não encontrado na base de dados.")
             else:
-                print("Ativo não encontrado na base de dados.")
+                print("Opção de busca inválida.")
+            if ativo_encontrado is not None:
+                print(f"ID: {ativo_encontrado['id']}")
+                print(f"Nome: {ativo_encontrado['nome']}")
+                print(f"Tipo: {TipoAtivo(ativo_encontrado['tipo']).name}")
+                print(f"Responsável: {ativo_encontrado['responsavel']}")
+                print(f"Setor: {ativo_encontrado['setor']}")
+                if ativo_encontrado['vulnerabilidade']:
+                    print("Vulnerabilidades:")
+                    for vulnerabilidade in ativo_encontrado['vulnerabilidade']:
+                        print(f"- Descrição: {vulnerabilidade['descricao']}, Categoria: {vulnerabilidade['categoria']}, Severidade: {vulnerabilidade['severidade']}, Status: {vulnerabilidade['status']}")
+                else:
+                    print("Nenhuma vulnerabilidade cadastrada para este ativo.")            
         elif opcao == 3:
             id_busca = input("Digite o ID do ativo que deseja atualizar: ")
             if id_busca in base_de_dados:
@@ -101,7 +113,26 @@ while True:
             except ValueError:        
                 print("Erro: Por favor, digite apenas números inteiros para o ID!")
         elif opcao == 5:
-            print("encerrando o sistema...")
+            id_busca = input("Digite o ID do ativo que deseja cadastrar a vulnerabilidade: ")
+            if id_busca in base_de_dados:
+                descricao_vuln = input("Descrição da vulnerabilidade: ")
+                categoria_vuln = input("Categoria: ")
+                severidade_vuln = input("Severidade (Baixa/Média/Alta/Crítica): ")
+                status_vuln = input("Status (Aberta/Em tratamento/Corrigida): ")
+                nova_vulnerabilidade = {
+                    "descricao": descricao_vuln,
+                    "categoria": categoria_vuln,
+                    "severidade": severidade_vuln,
+                    "status": status_vuln
+                }
+                base_de_dados[id_busca]["vulnerabilidade"].append(nova_vulnerabilidade)
+                with open("inventario.json", "w") as ficheiro:
+                    json.dump(base_de_dados, ficheiro, indent=4)
+                    print("Vulnerabilidade cadastrada com sucesso!")
+            else:
+                print("Ativo não encontrado na base de dados.")
+        elif opcao == 6:
+            print("Saindo do sistema...")
             break
         else:
             print("Opção não reconhecida. Tente novamente.")
