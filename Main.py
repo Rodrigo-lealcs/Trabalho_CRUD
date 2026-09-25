@@ -22,7 +22,7 @@ while True:
         if opcao == 1:
             id_do_ativo = input("Digite o ID do ativo: ")
             nome_do_ativo = input("Digite o nome do ativo: ")
-            tipo_do_ativo = input("Digite o tipo do ativo: ")
+            tipo_do_ativo = int(input("Digite o tipo do ativo:\n1 - NOTEBOOK_INTEL\n2 - NOTEBOOK_DEll\n3 - HD_EXTERNO\n4 - SERVIDOR\nEscolha: "))
             responsavel_pelo_ativo = input("Digite o responsável pelo ativo: " )
             setor_do_ativo = input("Digite o setor do ativo: ")
             ficha_do_ativo = {
@@ -63,19 +63,19 @@ while True:
             if id_busca in base_de_dados:
                 ativo_encontrado = base_de_dados[id_busca]
                 try:
-                    opcao_alterar = int(input(f"O que deseja alterar:\n1 - nome\n2 - tipo\n3 - responsavel\n4 - setor"))
+                    opcao_alterar = int(input(f"O que deseja alterar:\n1 - nome\n2 - tipo\n3 - responsavel\n4 - setor\nEscolha: "))
                     if opcao_alterar == 1:
-                        novo_nome = input("Digite o novo nome, ")
+                        novo_nome = input("Digite o novo nome: ")
                         ativo_encontrado['nome']= novo_nome
                     elif opcao_alterar == 2:
-                        tipo_escolhido = int(input("Escolha o novo tipo:\n1 - SERVIDOR\n2 - NOTEBOOK\n3 - HD_EXTERNO\n4 - ROTEADOR\nEscolha: "))
+                        tipo_escolhido = int(input("Digite o novo tipo do ativo:\n1 - NOTEBOOK_INTEL\n2 - NOTEBOOK_DEll\n3 - HD_EXTERNO\n4 - SERVIDOR\nEscolha: "))
                         novo_tipo = TipoAtivo(tipo_escolhido).name
                         ativo_encontrado['tipo'] = novo_tipo
                     elif opcao_alterar == 3:
-                        novo_responsavel = input("Digito o novo responsavel, ")
+                        novo_responsavel = input("Digito o novo responsavel: ")
                         ativo_encontrado['responsavel']= novo_responsavel
                     elif opcao_alterar == 4:
-                        novo_setor = input("Digite o novo setor, ")
+                        novo_setor = input("Digite o novo setor: ")
                         ativo_encontrado['setor']= novo_setor
                     else:print("Opção invalidá, escolha uma opção de 1 a 4")
                     with open("inventario.json", "w") as ficheiro:
