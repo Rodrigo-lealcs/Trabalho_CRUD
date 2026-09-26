@@ -21,11 +21,32 @@ while True:
     try:
         opcao = int(input("Escolha uma opção: "))
         if opcao == 1:
-            id_do_ativo = input("Digite o ID do ativo: ")
+            id_do_ativo = input("Digite o ID do ativo (apenas números): ")
+            while not id_do_ativo.isdigit():
+                id_do_ativo = input("Entrada inválida. Digite o ID do ativo (apenas números): ")
+            id_do_ativo = int(id_do_ativo)
+
             nome_do_ativo = input("Digite o nome do ativo: ")
-            tipo_do_ativo = int(input("Digite o tipo do ativo:\n1 - NOTEBOOK_INTEL\n2 - NOTEBOOK_DEll\n3 - HD_EXTERNO\n4 - SERVIDOR\nEscolha: "))
-            responsavel_pelo_ativo = input("Digite o responsável pelo ativo: " )
+            while nome_do_ativo == "":
+                nome_do_ativo = input("Nome não pode ser vazio. Digite o nome do ativo: ")
+
+            while True:
+                try:
+                    tipo_do_ativo = int(input("Digite o tipo do ativo:\n1 - NOTEBOOK_INTEL\n2 - NOTEBOOK_DELL\n3 - HD_EXTERNO\n4 - SERVIDOR\nEscolha: "))
+                    if tipo_do_ativo in [1, 2, 3, 4]:
+                        break
+                    print("Opção inválida. Escolha um número entre 1 e 4.")
+                except ValueError:
+                    print("Erro: Digite apenas números inteiros.")
+
+            responsavel_pelo_ativo = input("Digite o responsável pelo ativo: ")
+            while responsavel_pelo_ativo == "":
+                responsavel_pelo_ativo = input("Responsável não pode ser vazio. Digite o responsável pelo ativo: ")
+
             setor_do_ativo = input("Digite o setor do ativo: ")
+            while setor_do_ativo == "":
+                setor_do_ativo = input("Setor não pode ser vazio. Digite o setor do ativo: ")
+
             ficha_do_ativo = {
                 "id": id_do_ativo,
                 "nome": nome_do_ativo,
@@ -38,7 +59,7 @@ while True:
             with open("inventario.json", "w") as ficheiro:
                 json.dump(base_de_dados, ficheiro, indent=4)
             print(f"---Ativo com Id {id_do_ativo} cadastrado com sucesso!---")
-           
+
         elif opcao == 2:
             ativo_encontrado = None
             tipo_de_busca = int(input("Deseja buscar por:\n1 - ID\n2 - Nome\nEscolha: "))
@@ -78,27 +99,35 @@ while True:
                     opcao_alterar = int(input(f"O que deseja alterar:\n1 - nome\n2 - tipo\n3 - responsavel\n4 - setor\nEscolha: "))
                     if opcao_alterar == 1:
                         novo_nome = input("Digite o novo nome: ")
+                        while novo_nome == "":
+                            novo_nome = input("Nome não pode ser vazio. Digite o novo nome: ")
                         ativo_encontrado['nome']= novo_nome
                     elif opcao_alterar == 2:
                         tipo_escolhido = int(input("Digite o novo tipo do ativo:\n1 - NOTEBOOK_INTEL\n2 - NOTEBOOK_DEll\n3 - HD_EXTERNO\n4 - SERVIDOR\nEscolha: "))
                         novo_tipo = TipoAtivo(tipo_escolhido).name
                         ativo_encontrado['tipo'] = novo_tipo
                     elif opcao_alterar == 3:
-                        novo_responsavel = input("Digito o novo responsavel: ")
+                        novo_responsavel = input("Digite o novo responsável: ")
+                        while novo_responsavel == "":
+                            novo_responsavel = input("Responsável não pode ser vazio. Digite o novo responsável: ")
                         ativo_encontrado['responsavel']= novo_responsavel
                     elif opcao_alterar == 4:
                         novo_setor = input("Digite o novo setor: ")
+                        while novo_setor == "":
+                            novo_setor = input("Setor não pode ser vazio. Digite o novo setor: ")
                         ativo_encontrado['setor']= novo_setor
                     else:print("Opção invalidá, escolha uma opção de 1 a 4")
                     with open("inventario.json", "w") as ficheiro:
                         json.dump(base_de_dados, ficheiro, indent=4)
                 except ValueError:
-                    print("Erro: Por favor, digite apenas númeors inteiros!")
+                    print("Erro: Por favor, digite apenas números inteiros!")
             else:
                 print("Ativo não encontrado na base de dados.")
         elif opcao == 4:
             try:
                 id_busca = input("Digite o Id do ativo que deseja remover: ")
+                while not id_busca.isdigit():
+                    id_busca = input("Erro: Por favor, digite apenas números inteiros para o ID: ")
                 if id_busca in base_de_dados:
                     confimacao = input(f"Tem certeza de que deseja excluir esse o ID {id_busca}? (S/N): ").lower()
                     if confimacao == "s":
@@ -116,9 +145,17 @@ while True:
             id_busca = input("Digite o ID do ativo que deseja cadastrar a vulnerabilidade: ")
             if id_busca in base_de_dados:
                 descricao_vuln = input("Descrição da vulnerabilidade: ")
+                while descricao_vuln == "":
+                    descricao_vuln = input("Descrição não pode ser vazia. Digite a descrição da vulnerabilidade: ")
                 categoria_vuln = input("Categoria: ")
+                while categoria_vuln == "":
+                    categoria_vuln = input("Categoria não pode ser vazia. Digite a categoria: ")    
                 severidade_vuln = input("Severidade (Baixa/Média/Alta/Crítica): ")
+                while severidade_vuln not in ["Baixa", "Média", "Alta", "Crítica"]:
+                    severidade_vuln = input("Severidade inválida. Digite a severidade (Baixa/Média/Alta/Crítica): ")    
                 status_vuln = input("Status (Aberta/Em tratamento/Corrigida): ")
+                while status_vuln not in ["Aberta", "Em tratamento", "Corrigida"]:
+                    status_vuln = input("Status inválido. Digite o status (Aberta/Em tratamento/Corrigida): ")
                 nova_vulnerabilidade = {
                     "descricao": descricao_vuln,
                     "categoria": categoria_vuln,

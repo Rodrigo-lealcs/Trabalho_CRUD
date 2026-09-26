@@ -1,17 +1,1 @@
-{
-    "666": {
-        "id": "666",
-        "nome": "marca da besta",
-        "tipo": 4,
-        "responsavel": "belzebub",
-        "setor": "inferno",
-        "vulnerabilidade": [
-            {
-                "descricao": "sistema desatualizado",
-                "categoria": "sistema",
-                "severidade": "m\u00e9dia",
-                "status": "Aberta"
-            }
-        ]
-    }
-}
+{}
