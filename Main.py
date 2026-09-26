@@ -24,29 +24,19 @@ while True:
             id_do_ativo = input("Digite o ID do ativo (apenas números): ")
             while not id_do_ativo.isdigit():
                 id_do_ativo = input("Entrada inválida. Digite o ID do ativo (apenas números): ")
-            id_do_ativo = int(id_do_ativo)
-
             nome_do_ativo = input("Digite o nome do ativo: ")
-            while nome_do_ativo == "":
+            while nome_do_ativo.strip() == "":  # corrigido: .strip() rejeita nome só com espaço
                 nome_do_ativo = input("Nome não pode ser vazio. Digite o nome do ativo: ")
-
-            while True:
-                try:
-                    tipo_do_ativo = int(input("Digite o tipo do ativo:\n1 - NOTEBOOK_INTEL\n2 - NOTEBOOK_DELL\n3 - HD_EXTERNO\n4 - SERVIDOR\nEscolha: "))
-                    if tipo_do_ativo in [1, 2, 3, 4]:
-                        break
-                    print("Opção inválida. Escolha um número entre 1 e 4.")
-                except ValueError:
-                    print("Erro: Digite apenas números inteiros.")
-
-            responsavel_pelo_ativo = input("Digite o responsável pelo ativo: ")
-            while responsavel_pelo_ativo == "":
-                responsavel_pelo_ativo = input("Responsável não pode ser vazio. Digite o responsável pelo ativo: ")
-
+            tipo_input = input("Digite o tipo do ativo:\n1 - NOTEBOOK_INTEL\n2 - NOTEBOOK_DEll\n3 - HD_EXTERNO\n4 - SERVIDOR\nEscolha: ")
+            while not tipo_input.isdigit() or int(tipo_input) not in [1, 2, 3, 4]:  # corrigido: valida antes de converter, evita crash com entrada em branco/invalida
+                tipo_input = input("Tipo inválido. Digite o tipo do ativo:\n1 - NOTEBOOK_INTEL\n2 - NOTEBOOK_DEll\n3 - HD_EXTERNO\n4 - SERVIDOR\nEscolha: ")
+            tipo_do_ativo = int(tipo_input)
+            responsavel_pelo_ativo = input("Digite o responsável pelo ativo: " )
+            while responsavel_pelo_ativo.strip() == "":  # corrigido: .strip() rejeita responsavel só com espaço
+                responsavel_pelo_ativo = input("Responsável não pode ser vazio. Digite o responsável pelo ativo: ") 
             setor_do_ativo = input("Digite o setor do ativo: ")
-            while setor_do_ativo == "":
+            while setor_do_ativo.strip() == "":  # corrigido: .strip() rejeita setor só com espaço
                 setor_do_ativo = input("Setor não pode ser vazio. Digite o setor do ativo: ")
-
             ficha_do_ativo = {
                 "id": id_do_ativo,
                 "nome": nome_do_ativo,
@@ -59,7 +49,7 @@ while True:
             with open("inventario.json", "w") as ficheiro:
                 json.dump(base_de_dados, ficheiro, indent=4)
             print(f"---Ativo com Id {id_do_ativo} cadastrado com sucesso!---")
-
+           
         elif opcao == 2:
             ativo_encontrado = None
             tipo_de_busca = int(input("Deseja buscar por:\n1 - ID\n2 - Nome\nEscolha: "))
@@ -99,21 +89,22 @@ while True:
                     opcao_alterar = int(input(f"O que deseja alterar:\n1 - nome\n2 - tipo\n3 - responsavel\n4 - setor\nEscolha: "))
                     if opcao_alterar == 1:
                         novo_nome = input("Digite o novo nome: ")
-                        while novo_nome == "":
+                        while novo_nome.strip() == "":
                             novo_nome = input("Nome não pode ser vazio. Digite o novo nome: ")
                         ativo_encontrado['nome']= novo_nome
                     elif opcao_alterar == 2:
-                        tipo_escolhido = int(input("Digite o novo tipo do ativo:\n1 - NOTEBOOK_INTEL\n2 - NOTEBOOK_DEll\n3 - HD_EXTERNO\n4 - SERVIDOR\nEscolha: "))
-                        novo_tipo = TipoAtivo(tipo_escolhido).name
-                        ativo_encontrado['tipo'] = novo_tipo
+                        tipo_input = input("Digite o novo tipo do ativo:\n1 - NOTEBOOK_INTEL\n2 - NOTEBOOK_DEll\n3 - HD_EXTERNO\n4 - SERVIDOR\nEscolha: ")
+                        while not tipo_input.isdigit() or int(tipo_input) not in [1, 2, 3, 4]:
+                            tipo_input = input("Tipo inválido. Digite o novo tipo do ativo:\n1 - NOTEBOOK_INTEL\n2 - NOTEBOOK_DEll\n3 - HD_EXTERNO\n4 - SERVIDOR\nEscolha: ")
+                        ativo_encontrado['tipo'] = int(tipo_input)
                     elif opcao_alterar == 3:
                         novo_responsavel = input("Digite o novo responsável: ")
-                        while novo_responsavel == "":
+                        while novo_responsavel.strip() == "":
                             novo_responsavel = input("Responsável não pode ser vazio. Digite o novo responsável: ")
                         ativo_encontrado['responsavel']= novo_responsavel
                     elif opcao_alterar == 4:
                         novo_setor = input("Digite o novo setor: ")
-                        while novo_setor == "":
+                        while novo_setor.strip() == "":
                             novo_setor = input("Setor não pode ser vazio. Digite o novo setor: ")
                         ativo_encontrado['setor']= novo_setor
                     else:print("Opção invalidá, escolha uma opção de 1 a 4")
@@ -145,10 +136,10 @@ while True:
             id_busca = input("Digite o ID do ativo que deseja cadastrar a vulnerabilidade: ")
             if id_busca in base_de_dados:
                 descricao_vuln = input("Descrição da vulnerabilidade: ")
-                while descricao_vuln == "":
+                while descricao_vuln.strip() == "":
                     descricao_vuln = input("Descrição não pode ser vazia. Digite a descrição da vulnerabilidade: ")
                 categoria_vuln = input("Categoria: ")
-                while categoria_vuln == "":
+                while categoria_vuln.strip() == "":
                     categoria_vuln = input("Categoria não pode ser vazia. Digite a categoria: ")    
                 severidade_vuln = input("Severidade (Baixa/Média/Alta/Crítica): ")
                 while severidade_vuln not in ["Baixa", "Média", "Alta", "Crítica"]:
